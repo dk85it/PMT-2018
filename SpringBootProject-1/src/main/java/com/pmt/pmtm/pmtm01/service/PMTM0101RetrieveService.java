@@ -1,5 +1,7 @@
 package com.pmt.pmtm.pmtm01.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +40,7 @@ public class PMTM0101RetrieveService {
 		Map<String , String> mapStatus = codeMstStatus.stream().collect(Collectors.toMap(CommonKeyMst::getCodeKey2IdStream, CommonKeyMst::getCdData1));
 		/*********************Status Map*********************/
 		
-		List<Employee> list = employeeDaoImpl.getEmployeeList(userContext, resultModel.getEin());
+		List<Employee> list = employeeDaoImpl.getEmployeeList(userContext, resultModel.getEin(), changeDateFormatToBasic(resultModel.getDobDate()), changeDateFormatToBasic(resultModel.getDobDateTo()));
 	
 		for (Employee ms : list) {
 			
@@ -59,5 +61,13 @@ public class PMTM0101RetrieveService {
 		else
 			resultModel.setSuccessMessage(detailList.size() + " Rows found");
 		return detailList;
+	}
+	
+	// Date Format Change From "DD/MM/YYYY" To "YYYYMMDD".
+	private String changeDateFormatToBasic(String str) {
+		if (str != null && !str.trim().equals("")) {
+			return LocalDate.parse(str, DateTimeFormatter.ofPattern("dd/MM/yyyy")).format(DateTimeFormatter.BASIC_ISO_DATE);
+		}
+		return "";
 	}
 }
