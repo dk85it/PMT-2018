@@ -37,8 +37,8 @@
 													<div class="input-group">
 														<form:input path="resultModel.dobDate"
 															class="form-control input-sm input-div" size="8"
-															placeholder="--Select Date--" id="resultModel.dobDate"
-															readonly="true" />
+															placeholder="--(DD/MM/YYYY)--" id="resultModel.dobDate"
+															readonly="false" />
 														<span class="input-group-addon calSpan"
 															style="background-color: #fff; height: 25px; padding-top: 0px; padding-bottom: 0px;"
 															onclick="openCalender()">
@@ -55,8 +55,8 @@
 													<div class="input-group">
 														<form:input path="resultModel.dobDateTo"
 															class="form-control input-sm input-div" size="8"
-															placeholder="--Select Date--" id="resultModel.dobDateTo"
-															readonly="true" />
+															placeholder="--(DD/MM/YYYY)--" id="resultModel.dobDateTo"
+															readonly="false" />
 														<span class="input-group-addon calSpan"
 															style="background-color: #fff; height: 25px; padding-top: 0px; padding-bottom: 0px;"
 															onclick="openCalender1()">
