@@ -1,17 +1,12 @@
 package com.pmt.entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import com.pmt.pcommon.model.Auditable;
 
@@ -21,6 +16,7 @@ import lombok.Data;
 @Table(name="employee")
 @NamedQuery(name="Employee.findAll", query="SELECT e FROM Employee e")
 public @Data class Employee extends Auditable<String> implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
@@ -31,6 +27,9 @@ public @Data class Employee extends Auditable<String> implements Serializable {
 	
 	@Column(name="date_of_birth")
 	private String dateOfBirth;
+	
+	@Column(name="emp_sts")
+	private String status;
 
 	@Column(name="update_counter")
 	private Integer updateCounter;
@@ -44,6 +43,7 @@ public @Data class Employee extends Auditable<String> implements Serializable {
 	public Employee(EmployeePK id, 
 					String empName, 
 					String dateOfBirth, 
+					String status,
 					Integer updateCounter, 
 					String updateProgram){
 		
@@ -51,6 +51,7 @@ public @Data class Employee extends Auditable<String> implements Serializable {
 		this.id = id;
 		this.empName = empName;
 		this.dateOfBirth = dateOfBirth;
+		this.status = status;
 		this.updateCounter = updateCounter;
 		this.updateProgram = updateProgram;
 	}

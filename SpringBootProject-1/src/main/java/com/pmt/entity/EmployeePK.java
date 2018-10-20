@@ -9,31 +9,22 @@ import javax.persistence.MappedSuperclass;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import lombok.Data;
+
 @Embeddable
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class EmployeePK implements Serializable {
-	//default serial version id, required for serializable classes.
+public @Data class EmployeePK implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
+	@Column(name="ein")
 	private String ein;
 
 	@Column(name="sys_owner_cd")
 	private String sysOwnerCd;
 
 	public EmployeePK() {
-	}
-	public String getEin() {
-		return this.ein;
-	}
-	public void setEin(String ein) {
-		this.ein = ein;
-	}
-	public String getSysOwnerCd() {
-		return this.sysOwnerCd;
-	}
-	public void setSysOwnerCd(String sysOwnerCd) {
-		this.sysOwnerCd = sysOwnerCd;
 	}
 
 	public EmployeePK(String ein, String sysOwnerCd) {

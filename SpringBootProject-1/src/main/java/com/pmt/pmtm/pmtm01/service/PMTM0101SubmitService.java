@@ -68,6 +68,7 @@ public class PMTM0101SubmitService {
 					}
 					employee.setEmpName(detailModel.getEmpName());
 					employee.setDateOfBirth(detailModel.getEmpDateOfBirth());
+					employee.setStatus(detailModel.getStatusCd());
 					if (!newRecord)
 						employee.setUpdateCounter(employee.getUpdateCounter() + 1);
 					else
