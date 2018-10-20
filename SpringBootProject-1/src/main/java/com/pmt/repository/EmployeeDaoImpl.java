@@ -45,6 +45,33 @@ public class EmployeeDaoImpl {
 		return result;
 	}
 	
+	public List<Employee> getEmployeeList(String sysOwnerCd, String empId, String dateFrom, String dateTo) {
+		
+		CriteriaBuilder qb = this.em.getCriteriaBuilder();
+		CriteriaQuery<Employee> query = qb.createQuery(Employee.class);
+		Root<Employee> emp = query.from(Employee.class);
+
+		Predicate where = qb.conjunction();
+		where = qb.and(where, qb.equal(emp.get("id").get("sysOwnerCd"), sysOwnerCd));
+		
+		if (empId != null && !empId.equals(PMTConstants.CHAR_BLANK)) {
+			where = qb.and(where, qb.equal(emp.get("id").get("ein"), empId));
+		}
+		
+		if (dateFrom != null && !dateFrom.equals(PMTConstants.CHAR_BLANK)) {
+			where = qb.and(where, qb.greaterThanOrEqualTo(emp.get("dateOfBirth"), dateFrom));
+		}
+		
+		if (dateTo != null && !dateTo.equals(PMTConstants.CHAR_BLANK)) {
+			where = qb.and(where, qb.lessThanOrEqualTo(emp.get("dateOfBirth"), dateTo));
+		}
+			
+		query.where(where);
+		query.orderBy(qb.asc(emp.get("empName")));
+		List<Employee> result = em.createQuery(query).getResultList();
+		return result;
+	}
+
 	public List<Employee> getEmployeeEntityByEinList(List<String> ein, String sysOwnerCd) {
 
 		CriteriaBuilder qb = em.getCriteriaBuilder();
