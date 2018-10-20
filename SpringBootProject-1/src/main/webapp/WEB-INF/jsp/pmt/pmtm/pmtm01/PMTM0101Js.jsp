@@ -66,6 +66,7 @@ var source={};
 var dataAdapter;
 var functionUrlPattern = "${pageContext.request.contextPath}/pmtm/pmtm01/pmtm0101/"
 var ccViewListData = [];
+var statusList = new Array();
 var sourceView = {};
 var adapterView;
 var deletedRow = new Array();
@@ -74,6 +75,17 @@ var deletedRow = new Array();
 			.ready(
 					function() {
 						
+						var statusSource =
+				         {
+				      	   datatype: "array",
+				      	   datafields: [
+				 				{ name: 'cdKey2', map: 'id>cdKey2',type: 'string'},
+				              	{ name: 'cdData1',type: 'string'}
+				 				],
+				 				localdata: statusList
+				         };
+				         var statusDataAdapter = new $.jqx.dataAdapter(statusSource);
+				         
 						data = ${PMTM0101Form.resultModel.jsonResult};
 						
 						source = {
@@ -91,6 +103,14 @@ var deletedRow = new Array();
 								name : 'empDateOfBirth',
 								type : 'string'
 							}, {
+								name : 'status',
+								type : 'string',
+								value: 'statusCd',
+		                        values: {source: statusDataAdapter.records, value: 'id.cdKey2', name: 'cdData1' }
+							}, {
+		                         name: 'statusCd',
+		                         type: 'string',
+		                     }, {
 								 name : 'rowStatus',
 								 type : 'string'
 							 }, {
@@ -213,18 +233,6 @@ var deletedRow = new Array();
 								width : '20%',
 								align : 'center',
 								editable: true,
-						        editoptions: {
-						            size: 20,
-						            maxlengh: 10,
-						            dataInit: function (element) {
-						                $(element).datepicker({
-						                    dateFormat: 'yy-mm-dd',
-						                    constrainInput: false,
-						                    showOn: 'button',
-						                    buttonText: '...'
-						                });
-						            }
-						        },
 								cellclassname: function (row, column, value, defaultHTML) {
 		                    	var errorString = $("#jqxgridPMTM01").jqxGrid('getcellvalue', row, "errorFieldGrid");
 		                        if(errorString!=null){
@@ -232,7 +240,29 @@ var deletedRow = new Array();
 		                           		if(n>=0){ return 'onError'; }
 		                           	 }
 		                        }
-							} ,{
+							}, {
+		                           datafield: 'statusCd',
+								   displayfield:'status',  
+								   text: 'Status',
+								   width : '10%', 
+								   editable: true , 
+								   cellsrenderer: cellsrenderer, 
+								   align: 'center', 
+								   columntype: 'dropdownlist',
+								   cellbeginedit: newRowRuleEdit,
+		                           cellclassname: function (row, column, value, defaultHTML) {
+		                           	   var errorString = $("#jqxgridPMTM01").jqxGrid('getcellvalue', row, "errorFieldGrid");
+		                           	   if(errorString!=null){
+		                           	 	 var n = errorString.search("status");
+			                           	   if(n>=0){
+			                           		   return 'onError';
+			                           	   }
+		                           	 }
+		                          }, createeditor: function (row, column, editor) {
+	                                   editor.jqxDropDownList({ autoDropDownHeight: true , source: statusDataAdapter,displayMember: 'cdData1', valueMember: 'cdKey2' });
+	                               }
+	                              
+	                       },{
 								datafield : 'errorMsg',
 								text : 'Error Message',
 								align : 'center',
@@ -271,6 +301,8 @@ var deletedRow = new Array();
 						$('#jqxgridPMTM01').jqxGrid({
 							pagesizeoptions : [ '100', '200', '500' ]
 						});
+						
+						searchStatusAjax();
 						
 						$("#jqxgridPMTM01").on('cellvaluechanged', function (event) {
 							
@@ -330,7 +362,8 @@ var deletedRow = new Array();
 						 // create new row.
 						 $("#addrowbutton").jqxButton();
 				         $("#addrowbutton").on('click', function () {
-				            	$("#jqxgridPMTM01").jqxGrid('addrow', null, {rowStatus:'${NEW_MODIFY}', errorFlag:'false'},'top');
+				            	//$("#jqxgridPMTM01").jqxGrid('addrow', null, {rowStatus:'${NEW_MODIFY}', errorFlag:'false'},'bottom');
+				            	  $("#jqxgridPMTM01").jqxGrid('addrow', null, {rowStatus:'${NEW_MODIFY}', errorFlag:'false',statusCd:'1',status:'Active'},'top');
 				            	//showDetailBtn();
 				           });
 				         
@@ -454,6 +487,34 @@ var deletedRow = new Array();
 		else
 			return false;
 	}
+	
+	// Employee Status Drop Down 
+	function searchStatusAjax() {
+		
+		$.ajax({
+			contentType : "application/json",
+					url : "/SpringBootProject-1/helper/getActInActFlag/",
+					success : function(result) {
+						var flag = 0;
+						var combo = document.getElementById("resultModel.status");
+						combo.innerHTML = "";
+						var option = document.createElement("option");
+						
+						for (var i = 0; i < result.length; i++) {
+							statusList.push(result[i]);
+							var option = document.createElement("option");
+							option.text = result[i].cdData1;
+							option.value = result[i].id.cdKey2;
+							
+							try {
+								combo.add(option, null); //Standard 
+							} catch (error) {
+								combo.add(option);
+							}
+						}
+					}
+				})
+	};
 
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 </script>
