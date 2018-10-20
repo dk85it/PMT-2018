@@ -66,7 +66,7 @@ public class PMTM0101Controller {
 	
 	@Transactional
 	@ResponseBody
-	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "/submit", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/submit", method = { RequestMethod.GET, RequestMethod.POST }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public PMTM0101Form MS0201Submit(Model model, @RequestBody PMTM0101Form form, HttpServletRequest request) {
 
 		ObjectMapper mapper = new ObjectMapper();
