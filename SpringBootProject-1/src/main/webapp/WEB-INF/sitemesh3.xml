@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sitemesh>
+<sitemesh>
+  <mapping>
+ 		<decorator>/WEB-INF/share/decorator/minimum.jsp</decorator>
+  </mapping>
+ 
+</sitemesh>

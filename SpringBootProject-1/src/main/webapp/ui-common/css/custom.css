@@ -1,0 +1,103 @@
+/* body{font-family: Roboto,sans-serif !important;} */
+body {
+    font-family: "Open Sans", sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+/*     font-weight: 550; */
+}
+
+.form-control{font-size: 12px;}
+label {
+    font-weight: 500;
+    font-size: 0.900em;
+}
+
+input {  font-weight: 500;}
+
+h1{padding-left:0px;}
+
+.breadcrumb{padding:8px 2px;}
+.breadcrumb > li{text-transform:capitalize; font-size:12px;}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus{background:#e8ebf2 !important;}
+.infographic-box.merged{border:none;}
+/* .infographic-box i{margin-left:4px;}
+.infographic-box.merged .headline{text-align:center;} */
+
+.theme-whbl .btn-primary{
+	background-color: #2cbad8;
+    border-color: #2cbad8;
+}
+
+.fixed-header #page-wrapper{
+	padding-top:10px;
+}
+
+.theme-whbl .btn-primary:hover, .theme-whbl .btn-primary:focus, .theme-whbl .btn-primary:active, .theme-whbl .btn-primary.active, .theme-whbl .open .dropdown-toggle.btn-primary
+{
+	background-color: #2cbad8;
+    border-color: #2cbad8;
+}
+.theme-whbl #header-navbar
+{
+	/* background-color: #c1392b; */
+	position: fixed;
+    width: 100%;
+    z-index: 999;
+}
+/* .theme-whbl .navbar > .container .navbar-brand
+{
+	background:#8c0200;
+} */
+#sidebar-nav .nav > li > a > span
+{
+	color:#484544;
+}
+#header-navbar .nav > li > a:hover, #header-navbar .nav > li > a:focus, #header-navbar .nav .open > a, #header-navbar .nav .open > a:hover, #header-navbar .nav .open > a:focus, .navbar-toggle:hover, .navbar-toggle:focus, .mobile-search.active > .btn
+{
+	/* background:#8c0200 !important; */
+}
+
+.theme-red #nav-col, .theme-red #page-wrapper{
+background:#e8ebf2 !important;
+border-right:1px solid #dde1e4 !important;
+}
+#nav-col{
+	padding-top:20px !important;
+	position:fixed;
+	height:100%;
+	margin-top:35px;
+}
+#sidebar-nav .nav > li > a{
+	color:#000 !important;
+}
+#sidebar-nav .nav > li.active > a,#sidebar-nav .nav > li:hover > a{
+	color:#000 !important;
+}
+
+#content-wrapper{min-height:500px !important; margin-top:35px;padding-bottom:0px;}
+
+.yamaha-logo{width:100%; position:absolute !important; bottom:35px !important; border-top:1px solid #dde1e4; padding:10px 0px 10px 15px;}
+
+.navbar-nav > li > .dropdown-menu.notifications-list{
+	min-width:311px !important;
+	margin-left:-257px !important;
+	}
+
+
+.main-head h1{color:#fff !important; margin:0; padding:8px;}
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus, #sidebar-nav .nav-pills > li.active > a, #sidebar-nav .nav-pills > li.active > a:hover, #sidebar-nav .nav-pills > li.active > a:focus, .nav-small #nav-col #sidebar-nav .nav-pills > li.open > a
+{border-left-color: #c1392b !important; background:#e0e2e7 !important; }
+
+.theme-whbl #sidebar-nav .nav > li > a:hover{background:#e0e2e7;}
+
+.theme-whbl #sidebar-nav .nav > li > a:hover {
+	/* border-left-color: #c1392b !important; */
+}
+
+.theme-whbl #sidebar-nav .nav-pills > li.active > a > i{color: #c1392b !important;}
+
+/*DropDown Search */
+.mobile-search.active .drowdown-search,.mobile-search.active
+{
+	width:600px !important;
+}

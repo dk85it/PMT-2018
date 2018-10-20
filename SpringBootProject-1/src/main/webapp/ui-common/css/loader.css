@@ -1,0 +1,33 @@
+body {
+  overflow: hidden;
+}
+html,
+body {
+  background: #D4DFE6 ;
+  min-height: 100%;
+  width: 100%;
+  color: #274c5e;
+}
+.Container {
+  text-align: center;
+  position: relative;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.MainTitle {
+  display: block;
+  font-size: 2rem;
+  font-weight: lighter;
+  text-align: center;
+}
+.MainDescription {
+  max-width: 50%;
+  font-size: 1.2rem;
+  font-weight: lighter;
+}
+.MainGraphic {
+  position: relative;
+}
