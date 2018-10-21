@@ -506,6 +506,7 @@ var deletedRow = new Array();
 			//dataType : 'json',
 			success : function(res) {
 
+				
 				if (res.resultModel.error == false) {
 					showSuccessMessage(res.resultModel.successMessage);
 					source.localdata = res.resultModel.jsonResult;
