@@ -127,8 +127,7 @@ var deletedRow = new Array();
 						};
 			            
 			            var columnsrenderer = function(value) {
-							return '<div class="gridHeader">'
-									+ value + '</div>';
+							return '<div class="gridHeader">' + value + '</div>';
 						}
 						var renderercolor = function (value) {
 							return '<div class="gridHeader">'+value+ '<span class="grid-column-header" style="text-align:center"><b style="color:red;text-align:center">*</b></span></div>';
@@ -164,12 +163,12 @@ var deletedRow = new Array();
 							theme : 'ymsli_grid',
 							height : 400,
 							width : '100%',
-							showtoolbar : false,
+							showtoolbar : true,
 							pageable : true,
 							source : dataAdapter,
-							groupable: false,
-							autosavestate:true,
-					        autoloadstate:true, 
+							groupable: true,
+							autosavestate:false,
+					        autoloadstate:false, 
 							columnsheight : 32,
 							sortable : true,
 							editable : true,
@@ -183,9 +182,8 @@ var deletedRow = new Array();
 								}
 							},
 							columns : [{
-								
-								datafield : 'errorCount',
 								text : 'Error Count',
+								datafield : 'errorCount',
 								align : 'center',
 								width : '10%',
 								required: true,
@@ -195,12 +193,12 @@ var deletedRow = new Array();
 								cellclassname: errorClass,
 								renderer : columnsrenderer
 							}, {
-								datafield : 'ein',
 								text : 'Emp Id',
+								datafield : 'ein',
 								width : '10%',
 								align : 'center',
 								required: true,
-								pinned : true,
+								pinned : false,
 								cellclassname: function (row, column, value, defaultHTML) {
 		                    	var errorString = $("#jqxgridPMTM01").jqxGrid('getcellvalue', row, "errorFieldGrid");
 		                        if(errorString!=null){
@@ -209,14 +207,12 @@ var deletedRow = new Array();
 		                           	 }
 		                        }
 							}, {
-								datafield : 'empName',
 								text : 'Emp Name',
-								width : '10%',
+								datafield : 'empName',
+								width : '20%',
 								align : 'center',
 								required: true,
-								cellsrenderer : cellsrenderer,
 								editable : true,
-								renderer : columnsrenderer,
 				                cellvaluechanging: function (row, column, columntype, oldvalue, newvalue) {
 	                                 return newvalue.toUpperCase();
 				                },
@@ -226,43 +222,46 @@ var deletedRow = new Array();
 		                        	var n = errorString.search("empName");
 		                           	   if(n>=0){ return 'onError'; }
 		                           	 }
-		                          }
-							}, {
+		                        }
+	                       },{
+	                    	   
+	                    		text : 'Date Of Birth',
 								datafield : 'empDateOfBirth',
-								text : 'Date Of Birth',
-								width : '20%',
+								width : '30%',
 								align : 'center',
 								editable: true,
 								cellclassname: function (row, column, value, defaultHTML) {
-		                    	var errorString = $("#jqxgridPMTM01").jqxGrid('getcellvalue', row, "errorFieldGrid");
-		                        if(errorString!=null){
-		                        	var n = errorString.search("ein");
+		                    		var errorString = $("#jqxgridPMTM01").jqxGrid('getcellvalue', row, "errorFieldGrid");
+		                        	if(errorString!=null){
+		                        		var n = errorString.search("empDateOfBirth");
 		                           		if(n>=0){ return 'onError'; }
-		                           	 }
+		                           	}
 		                        }
+	                       }, {
+								
+							   text: 'Status',
+	                           datafield: 'statusCd',
+							   displayfield:'status',  
+							   width : '40%', 
+							   editable: true , 
+							   cellsrenderer: cellsrenderer, 
+							   align: 'center', 
+							   columntype: 'dropdownlist',
+							   cellbeginedit: newRowRuleEdit,
+	                           cellclassname: function (row, column, value, defaultHTML) {
+	                           	   var errorString = $("#jqxgridPMTM01").jqxGrid('getcellvalue', row, "errorFieldGrid");
+	                           	   if(errorString!=null){
+	                           	 	 var n = errorString.search("status");
+		                           	   if(n>=0){
+		                           		   return 'onError';
+		                           	   }
+	                           	 }
+	                          }, createeditor: function (row, column, editor) {
+                                   editor.jqxDropDownList({ autoDropDownHeight: true , source: statusDataAdapter,displayMember: 'cdData1', valueMember: 'cdKey2' });
+                               }
+	                          
 							}, {
-		                           datafield: 'statusCd',
-								   displayfield:'status',  
-								   text: 'Status',
-								   width : '10%', 
-								   editable: true , 
-								   cellsrenderer: cellsrenderer, 
-								   align: 'center', 
-								   columntype: 'dropdownlist',
-								   cellbeginedit: newRowRuleEdit,
-		                           cellclassname: function (row, column, value, defaultHTML) {
-		                           	   var errorString = $("#jqxgridPMTM01").jqxGrid('getcellvalue', row, "errorFieldGrid");
-		                           	   if(errorString!=null){
-		                           	 	 var n = errorString.search("status");
-			                           	   if(n>=0){
-			                           		   return 'onError';
-			                           	   }
-		                           	 }
-		                          }, createeditor: function (row, column, editor) {
-	                                   editor.jqxDropDownList({ autoDropDownHeight: true , source: statusDataAdapter,displayMember: 'cdData1', valueMember: 'cdKey2' });
-	                               }
-	                              
-	                       },{
+								
 								datafield : 'errorMsg',
 								text : 'Error Message',
 								align : 'center',
@@ -395,8 +394,7 @@ var deletedRow = new Array();
 						var message = '${PMTM0101Form.resultModel.errorMessage}';
 						if (message != "" && message != null) {
 							document.getElementById("errorMessageNotification").innerText = message;
-							$("#errorMessageNotification").jqxNotification(
-									"open");
+							$("#errorMessageNotification").jqxNotification("open");
 							var errorField = '${PMTM0101Form.resultModel.errorField}'
 							var errorProp = errorField.split(",");
 							if (errorProp[0] == "header") {
