@@ -505,7 +505,6 @@ var deletedRow = new Array();
 			data : JSON.stringify(formData2),
 			//dataType : 'json',
 			success : function(res) {
-
 				
 				if (res.resultModel.error == false) {
 					showSuccessMessage(res.resultModel.successMessage);
@@ -555,6 +554,7 @@ var deletedRow = new Array();
 	}
 
 	function showValidationError(msg, uid) {
+		
 		closeAllNotification();
 		lastErrorElementToBlack();
 
@@ -564,9 +564,10 @@ var deletedRow = new Array();
             var errorProp = uid.split(",");
             if(errorProp.length >0 && errorProp[0]=="detail"){
            	   $("#jqxgridPMTM01").jqxGrid('setcellvalue', errorProp[2], "errorFlag", 'true'); 
-            } else if(errorProp.length >0 && errorProp[0]=="header"){
+            } 
+            if(errorProp.length >0 && errorProp[0]=="header"){
             	document.getElementById(errorProp[1]).style = "border-color: #FF0000;box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6);"
-                }
+            }
 		}
 	}
 
@@ -574,11 +575,13 @@ var deletedRow = new Array();
 	function showErrorFields(error){
 		if(error == "true" || error==true){
         	 $("#jqxgridPMTM01").jqxGrid('showcolumn', 'errorMsg');
+        	 $("#jqxgridPMTM01").jqxGrid('showcolumn', 'errorCount');
 		}
 	}
 	
 	function hideErrorFields(){
 		$("#jqxgridPMTM01").jqxGrid('hidecolumn', 'errorMsg');
+		$("#jqxgridPMTM01").jqxGrid('hidecolumn', 'errorCount');
 	}
 	
 	function showSuccessMessage(msg) {
