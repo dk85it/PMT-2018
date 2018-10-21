@@ -4,6 +4,20 @@
 <!DOCTYPE html>
 <html>
 <body>
+	<div id="errorMessageNotification"
+		style="display: none; margin-top: 50px">
+		<div>
+			<br> <br> <br> <br>
+		</div>
+	</div>
+	<div id="jqxLoader"></div>
+	<div id="successMessageNotification"
+		style="display: none; margin-top: 50px;">
+		<div>
+			<br> <br> <br> <br>
+		</div>
+	</div>
+	
 	<div id="content-wrapper">
 		<div class="row" style="opacity: 1;">
 			<div class="col-lg-12">
@@ -14,12 +28,11 @@
 								<div class="row"></div>
 								<form:form action="PMTM0101Form" method="post" modelAttribute="PMTM0101Form" class="form-horizontal" id="PMTM0101Form">
 									<div id="container">
-									
-											<div class="col-lg-3" style="display: none;">
-												<form:select path="resultModel.status"
-													class="form-control input-sm label-box"
-													id="resultModel.status" style="height:25px;padding-top:1px"/>
-											</div>
+										<div class="col-lg-3" style="display: none;">
+											<form:select path="resultModel.status"
+												class="form-control input-sm label-box"
+												id="resultModel.status" style="height:25px;padding-top:1px"/>
+										</div>
 									<div class="row top-margin">
 										<div class="col-lg-1" align="right">
 											<label class="label_style" for="resultModel.ein"><spring:message code="label.empId" /></label>

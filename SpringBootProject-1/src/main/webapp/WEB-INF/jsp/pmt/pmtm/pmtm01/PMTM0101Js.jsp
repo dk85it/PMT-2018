@@ -359,7 +359,7 @@ var deletedRow = new Array();
 						// Submit Button Click Event ----------End -------------
 						
 						
-						 // create new row.
+						 //**********************Create New Row **************************************************
 						 $("#addrowbutton").jqxButton();
 				         $("#addrowbutton").on('click', function () {
 				            	//$("#jqxgridPMTM01").jqxGrid('addrow', null, {rowStatus:'${NEW_MODIFY}', errorFlag:'false'},'bottom');
@@ -367,7 +367,7 @@ var deletedRow = new Array();
 				            	//showDetailBtn();
 				           });
 				         
-				         // Delete row from Grid.
+				         //**********************Delete Event Start************************************************
 				         $("#deletebtn").jqxButton();
 				         $("#deletebtn").on('click', function () {
 		                        var selectedrowindex = $("#jqxgridPMTM01").jqxGrid('getselectedrowindex');
@@ -378,7 +378,52 @@ var deletedRow = new Array();
 		                            $("#jqxgridPMTM01").jqxGrid('hiderow', id);
 		                            $("#jqxgridPMTM01").jqxGrid('setcellvalue', id, "rowStatus", '${DELETE}');
 		                        }
-		                    });
+		                 });
+				         
+				       //*****************Start Error Message / Sucess message*****************************************************
+						$("#errorMessageNotification").jqxNotification({
+							width : 450,
+							position : "top-right",
+							opacity : 0.9,
+							autoOpen : false,
+							animationOpenDelay : 800,
+							autoClose : false,
+							autoCloseDelay : 5000,
+							template : "error"
+						});
+				       
+						var message = '${PMTM0101Form.resultModel.errorMessage}';
+						if (message != "" && message != null) {
+							document.getElementById("errorMessageNotification").innerText = message;
+							$("#errorMessageNotification").jqxNotification(
+									"open");
+							var errorField = '${PMTM0101Form.resultModel.errorField}'
+							var errorProp = errorField.split(",");
+							if (errorProp[0] == "header") {
+								document.getElementById(errorProp[1]).style = "border-color: #FF0000;box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6);"
+							}
+						}
+						
+						$("#successMessageNotification").jqxNotification({
+							width : 450,
+							position : "top-right",
+							opacity : 0.9,
+							autoOpen : false,
+							animationOpenDelay : 800,
+							autoClose : true,
+							autoCloseDelay : 5000,
+							template : "success"
+						});
+						
+						var message = '${PMTM0101Form.resultModel.successMessage}';
+						if (message != "" && message != null) {
+							document.getElementById("successMessageNotification").innerText = message;
+							$("#successMessageNotification").jqxNotification("open");
+						}
+						
+						$(this).scrollTop(0);
+						
+						//*****************End Error Message / Sucess message*****************************************************
 					});
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
@@ -413,11 +458,18 @@ var deletedRow = new Array();
 					source.localdata = res.resultModel.jsonResult;
 					dataAdapter.dataBind();
 					$('#jqxgridPMTM01').jqxGrid('updatebounddata');
-				}
+					
+					showSuccessMessage(res.resultModel.successMessage);
+                	hideErrorFields();
+                	closeAllNotification();
+				} else {
+              	  errorMessageNotification(res.resultModel.errorMessage,document.getElementById(res.resultModel.errorField));
+                }
 				$('#jqxgridPMTM01').jqxGrid('hideloadelement');
 			},
 			error : function(error) {
 				var r = jQuery.parseJSON(error.responseText);
+				errorMessageNotification(r.exception+":"+r.message,null);
 				$('#jqxgridPMTM01').jqxGrid('hideloadelement');
 			}
 		});
@@ -455,26 +507,26 @@ var deletedRow = new Array();
 			success : function(res) {
 
 				if (res.resultModel.error == false) {
-					//showSuccessMessage(res.resultModel.successMessage);
+					showSuccessMessage(res.resultModel.successMessage);
 					source.localdata = res.resultModel.jsonResult;
 					dataAdapter.dataBind();
 					$('#jqxgridPMTM01').jqxGrid('updatebounddata');
-					//hideErrorFields();
+					hideErrorFields();
 					$('#jqxgridPMTM01').jqxGrid('clearselection');
 				} else {
 					source.localdata = res.resultModel.jsonResult;
 					dataAdapter.dataBind();
 					$('#jqxgridPMTM01').jqxGrid('updatebounddata');
 					$('#jqxgridPMTM01').jqxGrid('clearselection');
-					//showErrorFields(res.resultModel.error);
-					//showValidationError(res.resultModel.errorMessage, null);
+					showErrorFields(res.resultModel.error);
+					showValidationError(res.resultModel.errorMessage, null);
 				}
 
 				$('#jqxgridPMTM01').jqxGrid('hideloadelement');
 			},
 			error : function(error) {
 				var r = jQuery.parseJSON(error.responseText);
-				//showValidationError(r.exception + ":" + r.message, null);
+				showValidationError(r.exception + ":" + r.message, null);
 				$('#jqxgridPMTM01').jqxGrid('hideloadelement');
 			}
 		});
@@ -486,6 +538,58 @@ var deletedRow = new Array();
 			return true;
 		else
 			return false;
+	}
+	
+	var lastErrorElement = null;
+	function lastErrorElementToBlack() {
+		if (lastErrorElement != null && lastErrorElement != "") {
+			document.getElementById(lastErrorElement).style = "";
+			if (isText(lastErrorElement)) {
+				document.getElementById(lastErrorElement).style = "";
+			} else {
+				document.getElementById(lastErrorElement).style = "height:25px;padding-top:1px;"
+			}
+		}
+		lastErrorElement = null;
+	}
+
+	function showValidationError(msg, uid) {
+		closeAllNotification();
+		lastErrorElementToBlack();
+
+		document.getElementById("errorMessageNotification").innerText = msg;
+		$("#errorMessageNotification").jqxNotification("open");
+		if (uid != null && uid != "") {
+            var errorProp = uid.split(",");
+            if(errorProp.length >0 && errorProp[0]=="detail"){
+           	   $("#jqxgridPMTM01").jqxGrid('setcellvalue', errorProp[2], "errorFlag", 'true'); 
+            } else if(errorProp.length >0 && errorProp[0]=="header"){
+            	document.getElementById(errorProp[1]).style = "border-color: #FF0000;box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6);"
+                }
+		}
+	}
+
+	
+	function showErrorFields(error){
+		if(error == "true" || error==true){
+        	 $("#jqxgridPMTM01").jqxGrid('showcolumn', 'errorMsg');
+		}
+	}
+	
+	function hideErrorFields(){
+		$("#jqxgridPMTM01").jqxGrid('hidecolumn', 'errorMsg');
+	}
+	
+	function showSuccessMessage(msg) {
+		closeAllNotification();
+		lastErrorElementToBlack();
+		document.getElementById("successMessageNotification").innerText = msg;
+		$("#successMessageNotification").jqxNotification("open");
+	}
+
+	function closeAllNotification() {
+		$("#errorMessageNotification").jqxNotification("closeAll");
+		$("#successMessageNotification").jqxNotification("closeAll");
 	}
 	
 	// Employee Status Drop Down 
