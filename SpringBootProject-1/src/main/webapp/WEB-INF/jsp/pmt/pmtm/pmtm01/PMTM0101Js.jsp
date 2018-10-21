@@ -463,6 +463,7 @@ var deletedRow = new Array();
                 	hideErrorFields();
                 	closeAllNotification();
 				} else {
+					
               	  errorMessageNotification(res.resultModel.errorMessage,document.getElementById(res.resultModel.errorField));
                 }
 				$('#jqxgridPMTM01').jqxGrid('hideloadelement');
