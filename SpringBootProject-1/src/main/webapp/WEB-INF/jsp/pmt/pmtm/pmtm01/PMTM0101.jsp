@@ -3,6 +3,7 @@
 <jsp:include page="PMTM0101Js.jsp" />
 <!DOCTYPE html>
 <html>
+<meta name="description" content="Spring Boot Project -> CRUD Operation , Postgres database integration, JQ Notification Integration, JQ Grid Implemation, JQ Calender and Dropdown Integration in jqGrid Developed By Deepak Kumar">
 <body>
 	<div id="errorMessageNotification"
 		style="display: none; margin-top: 50px">
