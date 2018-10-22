@@ -168,7 +168,7 @@ var deletedRow = new Array();
 							source : dataAdapter,
 							groupable: true,
 							autosavestate:false,
-					        autoloadstate:false, 
+					        autoloadstate:true, 
 							columnsheight : 32,
 							sortable : true,
 							editable : true,
@@ -213,6 +213,9 @@ var deletedRow = new Array();
 								align : 'center',
 								required: true,
 								editable : true,
+								initeditor: function (row, column, editor) {
+			                          editor.attr('maxlength', 20);
+			                    },
 				                cellvaluechanging: function (row, column, columntype, oldvalue, newvalue) {
 	                                 return newvalue.toUpperCase();
 				                },
@@ -247,7 +250,6 @@ var deletedRow = new Array();
 							   cellsrenderer: cellsrenderer, 
 							   align: 'center', 
 							   columntype: 'dropdownlist',
-							   cellbeginedit: newRowRuleEdit,
 	                           cellclassname: function (row, column, value, defaultHTML) {
 	                           	   var errorString = $("#jqxgridPMTM01").jqxGrid('getcellvalue', row, "errorFieldGrid");
 	                           	   if(errorString!=null){
@@ -323,6 +325,8 @@ var deletedRow = new Array();
 							   }
 							   
 							   if(newvalue!='' && newvalue!=oldvalue && findvalue!= '${DELETE}'){
+								   
+								   
 								   if(findvalue=='${NEW}'){
 									   modifyFlag=1;
 									   if(!(checkIfEmpty(einValue) && checkIfEmpty(empNameValue) && checkIfEmpty(empDobValue))){
