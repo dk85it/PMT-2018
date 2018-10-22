@@ -232,6 +232,8 @@ var deletedRow = new Array();
 								datafield : 'empDateOfBirth',
 								width : '30%',
 								align : 'center',
+								columntype : 'datetimeinput',
+								cellsformat : 'dd/MM/yyyy',
 								editable: true,
 								cellclassname: function (row, column, value, defaultHTML) {
 		                    		var errorString = $("#jqxgridPMTM01").jqxGrid('getcellvalue', row, "errorFieldGrid");

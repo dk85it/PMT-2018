@@ -1,8 +1,12 @@
 package com.pmt.pmtm.pmtm01.service;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -67,7 +71,7 @@ public class PMTM0101SubmitService {
 						employee.setId(id);
 					}
 					employee.setEmpName(detailModel.getEmpName());
-					employee.setDateOfBirth(detailModel.getEmpDateOfBirth());
+					employee.setDateOfBirth(changeDateFormatToBasic(detailModel.getEmpDateOfBirth()));
 					employee.setStatus(detailModel.getStatusCd());
 					if (!newRecord)
 						employee.setUpdateCounter(employee.getUpdateCounter() + 1);
@@ -151,4 +155,19 @@ public class PMTM0101SubmitService {
 
 		return errorFlag;
 	}
+	
+	// Date Format Change From "DD/MM/YYYY" To "YYYYMMDD".
+	private String changeDateFormatToBasic(String str) {
+		if (str != null && !str.trim().equals("")) {
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+			LocalDate date = LocalDate.parse(str, formatter);
+			
+			String dateStr = date.toString().substring(8, 10) + "/" + date.toString().substring(5, 7) + "/" + date.toString().substring(0, 4);
+			
+			return LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy")).format(DateTimeFormatter.BASIC_ISO_DATE);
+		}
+		return "";
+	}
+	
 }
