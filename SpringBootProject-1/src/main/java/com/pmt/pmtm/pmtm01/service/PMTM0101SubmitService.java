@@ -112,45 +112,40 @@ public class PMTM0101SubmitService {
 	public Boolean validateFormGrid(PMTM0101DTO dto, String sysOwnerCd, Map<EmployeePK, Employee> mapItrMtMst) {
 		
 		List<PMTM0101ResultDetailModel> detailModelList = dto.getResultModel().getResult();
-		Set<String> einSet = new HashSet<String>();
 		boolean errorFlag = false;
 		
 		for (PMTM0101ResultDetailModel detailModel : detailModelList) {
 
-			if (detailModel.getRowStatus().equals(RowStatus.NEW_MODIFY)
-					|| detailModel.getRowStatus().equals(RowStatus.MODIFY)) {
+			StringJoiner errField = new StringJoiner(";");
+			StringJoiner sjErrorMsg = new StringJoiner(", ");
+			int errorCount = 0;
 
-				StringJoiner errField = new StringJoiner(";");
-				StringJoiner sjErrorMsg = new StringJoiner(", ");
-				int errorCount = 0;
-
-				if (StringUtils.isNullOrEmpty(detailModel.getEin())) {
-					sjErrorMsg.add("EIN Code is required");
-					errField.add(PMTCodeMstListConstants.Employee.code_string_ein);
-					errorCount++;
-				}
-				if (StringUtils.isNullOrEmpty(detailModel.getEmpName())) {
-					sjErrorMsg.add("Employee Name is required");
-					errField.add(PMTCodeMstListConstants.Employee.code_string_empName);
-					errorCount++;
-				}
-				if (StringUtils.isNullOrEmpty(detailModel.getEmpDateOfBirth())) {
-					sjErrorMsg.add("Date of Birth is required");
-					errField.add(PMTCodeMstListConstants.Employee.code_string_dateOfBirth);
-					errorCount++;
-				}
-			
-				if (errorCount > 0) {
-					detailModel.setErrorMsg(sjErrorMsg.toString());
-					detailModel.setErrorCount(errorCount);
-					detailModel.setErrorFieldGrid(errField.toString());
-					detailModel.setErrorFlag("true");
-					errorFlag = true;
-				} else {
-					detailModel.setErrorFieldGrid("");
-					detailModel.setErrorMsg("");
-					detailModel.setErrorCount(errorCount);
-				}
+			if (StringUtils.isNullOrEmpty(detailModel.getEin())) {
+				sjErrorMsg.add("EIN Code is required");
+				errField.add(PMTCodeMstListConstants.Employee.code_string_ein);
+				errorCount++;
+			}
+			if (StringUtils.isNullOrEmpty(detailModel.getEmpName())) {
+				sjErrorMsg.add("Employee Name is required");
+				errField.add(PMTCodeMstListConstants.Employee.code_string_empName);
+				errorCount++;
+			}
+			if (StringUtils.isNullOrEmpty(detailModel.getEmpDateOfBirth())) {
+				sjErrorMsg.add("Date of Birth is required");
+				errField.add(PMTCodeMstListConstants.Employee.code_string_dateOfBirth);
+				errorCount++;
+			}
+		
+			if (errorCount > 0) {
+				detailModel.setErrorMsg(sjErrorMsg.toString());
+				detailModel.setErrorCount(errorCount);
+				detailModel.setErrorFieldGrid(errField.toString());
+				detailModel.setErrorFlag("true");
+				errorFlag = true;
+			} else {
+				detailModel.setErrorFieldGrid("");
+				detailModel.setErrorMsg("");
+				detailModel.setErrorCount(errorCount);
 			}
 		}
 
