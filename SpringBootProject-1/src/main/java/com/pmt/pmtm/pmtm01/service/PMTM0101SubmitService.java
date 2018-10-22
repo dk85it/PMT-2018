@@ -156,7 +156,7 @@ public class PMTM0101SubmitService {
 		return errorFlag;
 	}
 	
-	// Date Format Change From "DD/MM/YYYY" To "YYYYMMDD".
+	// Date Format Change From "DD/MM/YYYY" To "YYYYMMDD" .
 	private String changeDateFormatToBasic(String str) {
 		if (str != null && !str.trim().equals("")) {
 			
