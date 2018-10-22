@@ -48,7 +48,7 @@ public class PMTM0101RetrieveService {
 				
 				detailModel.setEin(ms.getId().getEin());
 				detailModel.setEmpName(ms.getEmpName());
-				detailModel.setEmpDateOfBirth(converDateToView(ms.getDateOfBirth()));
+				detailModel.setEmpDateOfBirth(ms.getDateOfBirth());
 				detailModel.setStatusCd(ms.getStatus());
 				detailModel.setStatus(mapStatus.get(ms.getStatus()));
 				detailModel.setRowStatus(RowStatus.NOTMODIFY);
@@ -69,21 +69,5 @@ public class PMTM0101RetrieveService {
 			return LocalDate.parse(str, DateTimeFormatter.ofPattern("dd/MM/yyyy")).format(DateTimeFormatter.BASIC_ISO_DATE);
 		}
 		return "";
-	}
-	
-	private String converDateToView(String date) {
-		if (!isNullOrEmpty(date)) {
-			return LocalDate.parse(date, DateTimeFormatter.BASIC_ISO_DATE)
-					.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-		}
-		return "";
-	}
-
-	private boolean isNullOrEmpty(String str) {
-		if (str != null && !str.trim().equals("")) {
-			return false;
-		} else {
-			return true;
-		}
 	}
 }

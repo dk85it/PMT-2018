@@ -127,7 +127,8 @@ var deletedRow = new Array();
 						};
 			            
 			            var columnsrenderer = function(value) {
-							return '<div class="gridHeader">' + value + '</div>';
+							return '<div class="gridHeader">'
+									+ value + '</div>';
 						}
 						var renderercolor = function (value) {
 							return '<div class="gridHeader">'+value+ '<span class="grid-column-header" style="text-align:center"><b style="color:red;text-align:center">*</b></span></div>';
@@ -163,11 +164,11 @@ var deletedRow = new Array();
 							theme : 'ymsli_grid',
 							height : 400,
 							width : '100%',
-							showtoolbar : true,
+							showtoolbar : false,
 							pageable : true,
 							source : dataAdapter,
-							groupable: true,
-							autosavestate:false,
+							groupable: false,
+							autosavestate:true,
 					        autoloadstate:true, 
 							columnsheight : 32,
 							sortable : true,
@@ -182,8 +183,9 @@ var deletedRow = new Array();
 								}
 							},
 							columns : [{
-								text : 'Error Count',
+								
 								datafield : 'errorCount',
+								text : 'Error Count',
 								align : 'center',
 								width : '10%',
 								required: true,
@@ -193,12 +195,12 @@ var deletedRow = new Array();
 								cellclassname: errorClass,
 								renderer : columnsrenderer
 							}, {
-								text : 'Emp Id',
 								datafield : 'ein',
+								text : 'Emp Id',
 								width : '10%',
 								align : 'center',
 								required: true,
-								pinned : false,
+								pinned : true,
 								cellclassname: function (row, column, value, defaultHTML) {
 		                    	var errorString = $("#jqxgridPMTM01").jqxGrid('getcellvalue', row, "errorFieldGrid");
 		                        if(errorString!=null){
@@ -207,15 +209,14 @@ var deletedRow = new Array();
 		                           	 }
 		                        }
 							}, {
-								text : 'Emp Name',
 								datafield : 'empName',
-								width : '20%',
+								text : 'Emp Name',
+								width : '10%',
 								align : 'center',
 								required: true,
+								cellsrenderer : cellsrenderer,
 								editable : true,
-								initeditor: function (row, column, editor) {
-			                          editor.attr('maxlength', 20);
-			                    },
+								renderer : columnsrenderer,
 				                cellvaluechanging: function (row, column, columntype, oldvalue, newvalue) {
 	                                 return newvalue.toUpperCase();
 				                },
@@ -225,47 +226,43 @@ var deletedRow = new Array();
 		                        	var n = errorString.search("empName");
 		                           	   if(n>=0){ return 'onError'; }
 		                           	 }
-		                        }
-	                       },{
-	                    	   
-	                    		text : 'Date Of Birth',
+		                          }
+							}, {
 								datafield : 'empDateOfBirth',
-								width : '30%',
+								text : 'Date Of Birth',
+								width : '20%',
 								align : 'center',
-								columntype : 'datetimeinput',
-								cellsformat : 'dd/MM/yyyy',
 								editable: true,
 								cellclassname: function (row, column, value, defaultHTML) {
-		                    		var errorString = $("#jqxgridPMTM01").jqxGrid('getcellvalue', row, "errorFieldGrid");
-		                        	if(errorString!=null){
-		                        		var n = errorString.search("empDateOfBirth");
+		                    	var errorString = $("#jqxgridPMTM01").jqxGrid('getcellvalue', row, "errorFieldGrid");
+		                        if(errorString!=null){
+		                        	var n = errorString.search("ein");
 		                           		if(n>=0){ return 'onError'; }
-		                           	}
+		                           	 }
 		                        }
-	                       }, {
-								
-							   text: 'Status',
-	                           datafield: 'statusCd',
-							   displayfield:'status',  
-							   width : '40%', 
-							   editable: true , 
-							   cellsrenderer: cellsrenderer, 
-							   align: 'center', 
-							   columntype: 'dropdownlist',
-	                           cellclassname: function (row, column, value, defaultHTML) {
-	                           	   var errorString = $("#jqxgridPMTM01").jqxGrid('getcellvalue', row, "errorFieldGrid");
-	                           	   if(errorString!=null){
-	                           	 	 var n = errorString.search("status");
-		                           	   if(n>=0){
-		                           		   return 'onError';
-		                           	   }
-	                           	 }
-	                          }, createeditor: function (row, column, editor) {
-                                   editor.jqxDropDownList({ autoDropDownHeight: true , source: statusDataAdapter,displayMember: 'cdData1', valueMember: 'cdKey2' });
-                               }
-	                          
 							}, {
-								
+		                           datafield: 'statusCd',
+								   displayfield:'status',  
+								   text: 'Status',
+								   width : '10%', 
+								   editable: true , 
+								   cellsrenderer: cellsrenderer, 
+								   align: 'center', 
+								   columntype: 'dropdownlist',
+								   cellbeginedit: newRowRuleEdit,
+		                           cellclassname: function (row, column, value, defaultHTML) {
+		                           	   var errorString = $("#jqxgridPMTM01").jqxGrid('getcellvalue', row, "errorFieldGrid");
+		                           	   if(errorString!=null){
+		                           	 	 var n = errorString.search("status");
+			                           	   if(n>=0){
+			                           		   return 'onError';
+			                           	   }
+		                           	 }
+		                          }, createeditor: function (row, column, editor) {
+	                                   editor.jqxDropDownList({ autoDropDownHeight: true , source: statusDataAdapter,displayMember: 'cdData1', valueMember: 'cdKey2' });
+	                               }
+	                              
+	                       },{
 								datafield : 'errorMsg',
 								text : 'Error Message',
 								align : 'center',
@@ -327,8 +324,6 @@ var deletedRow = new Array();
 							   }
 							   
 							   if(newvalue!='' && newvalue!=oldvalue && findvalue!= '${DELETE}'){
-								   
-								   
 								   if(findvalue=='${NEW}'){
 									   modifyFlag=1;
 									   if(!(checkIfEmpty(einValue) && checkIfEmpty(empNameValue) && checkIfEmpty(empDobValue))){
@@ -400,7 +395,8 @@ var deletedRow = new Array();
 						var message = '${PMTM0101Form.resultModel.errorMessage}';
 						if (message != "" && message != null) {
 							document.getElementById("errorMessageNotification").innerText = message;
-							$("#errorMessageNotification").jqxNotification("open");
+							$("#errorMessageNotification").jqxNotification(
+									"open");
 							var errorField = '${PMTM0101Form.resultModel.errorField}'
 							var errorProp = errorField.split(",");
 							if (errorProp[0] == "header") {
@@ -467,7 +463,6 @@ var deletedRow = new Array();
                 	hideErrorFields();
                 	closeAllNotification();
 				} else {
-					
               	  errorMessageNotification(res.resultModel.errorMessage,document.getElementById(res.resultModel.errorField));
                 }
 				$('#jqxgridPMTM01').jqxGrid('hideloadelement');
@@ -510,6 +505,7 @@ var deletedRow = new Array();
 			data : JSON.stringify(formData2),
 			//dataType : 'json',
 			success : function(res) {
+
 				
 				if (res.resultModel.error == false) {
 					showSuccessMessage(res.resultModel.successMessage);
@@ -559,7 +555,6 @@ var deletedRow = new Array();
 	}
 
 	function showValidationError(msg, uid) {
-		
 		closeAllNotification();
 		lastErrorElementToBlack();
 
@@ -569,10 +564,9 @@ var deletedRow = new Array();
             var errorProp = uid.split(",");
             if(errorProp.length >0 && errorProp[0]=="detail"){
            	   $("#jqxgridPMTM01").jqxGrid('setcellvalue', errorProp[2], "errorFlag", 'true'); 
-            } 
-            if(errorProp.length >0 && errorProp[0]=="header"){
+            } else if(errorProp.length >0 && errorProp[0]=="header"){
             	document.getElementById(errorProp[1]).style = "border-color: #FF0000;box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6);"
-            }
+                }
 		}
 	}
 
@@ -580,13 +574,11 @@ var deletedRow = new Array();
 	function showErrorFields(error){
 		if(error == "true" || error==true){
         	 $("#jqxgridPMTM01").jqxGrid('showcolumn', 'errorMsg');
-        	 $("#jqxgridPMTM01").jqxGrid('showcolumn', 'errorCount');
 		}
 	}
 	
 	function hideErrorFields(){
 		$("#jqxgridPMTM01").jqxGrid('hidecolumn', 'errorMsg');
-		$("#jqxgridPMTM01").jqxGrid('hidecolumn', 'errorCount');
 	}
 	
 	function showSuccessMessage(msg) {
