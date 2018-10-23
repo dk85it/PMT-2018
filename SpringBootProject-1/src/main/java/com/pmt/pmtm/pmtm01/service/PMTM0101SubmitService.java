@@ -1,10 +1,11 @@
 package com.pmt.pmtm.pmtm01.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
@@ -67,7 +68,7 @@ public class PMTM0101SubmitService {
 						employee.setId(id);
 					}
 					employee.setEmpName(detailModel.getEmpName());
-					employee.setDateOfBirth(detailModel.getEmpDateOfBirth());
+					employee.setDateOfBirth(changeDateFormatToBasic(detailModel.getEmpDateOfBirth()));
 					employee.setStatus(detailModel.getStatusCd());
 					if (!newRecord)
 						employee.setUpdateCounter(employee.getUpdateCounter() + 1);
@@ -112,48 +113,58 @@ public class PMTM0101SubmitService {
 	public Boolean validateFormGrid(PMTM0101DTO dto, String sysOwnerCd, Map<EmployeePK, Employee> mapItrMtMst) {
 		
 		List<PMTM0101ResultDetailModel> detailModelList = dto.getResultModel().getResult();
-		Set<String> einSet = new HashSet<String>();
 		boolean errorFlag = false;
 		
 		for (PMTM0101ResultDetailModel detailModel : detailModelList) {
 
-			if (detailModel.getRowStatus().equals(RowStatus.NEW_MODIFY)
-					|| detailModel.getRowStatus().equals(RowStatus.MODIFY)) {
+			StringJoiner errField = new StringJoiner(";");
+			StringJoiner sjErrorMsg = new StringJoiner(", ");
+			int errorCount = 0;
 
-				StringJoiner errField = new StringJoiner(";");
-				StringJoiner sjErrorMsg = new StringJoiner(", ");
-				int errorCount = 0;
-
-				if (StringUtils.isNullOrEmpty(detailModel.getEin())) {
-					sjErrorMsg.add("EIN Code is required");
-					errField.add(PMTCodeMstListConstants.Employee.code_string_ein);
-					errorCount++;
-				}
-				if (StringUtils.isNullOrEmpty(detailModel.getEmpName())) {
-					sjErrorMsg.add("Employee Name is required");
-					errField.add(PMTCodeMstListConstants.Employee.code_string_empName);
-					errorCount++;
-				}
-				if (StringUtils.isNullOrEmpty(detailModel.getEmpDateOfBirth())) {
-					sjErrorMsg.add("Date of Birth is required");
-					errField.add(PMTCodeMstListConstants.Employee.code_string_dateOfBirth);
-					errorCount++;
-				}
-			
-				if (errorCount > 0) {
-					detailModel.setErrorMsg(sjErrorMsg.toString());
-					detailModel.setErrorCount(errorCount);
-					detailModel.setErrorFieldGrid(errField.toString());
-					detailModel.setErrorFlag("true");
-					errorFlag = true;
-				} else {
-					detailModel.setErrorFieldGrid("");
-					detailModel.setErrorMsg("");
-					detailModel.setErrorCount(errorCount);
-				}
+			if (StringUtils.isNullOrEmpty(detailModel.getEin())) {
+				sjErrorMsg.add("EIN Code is required");
+				errField.add(PMTCodeMstListConstants.Employee.code_string_ein);
+				errorCount++;
+			}
+			if (StringUtils.isNullOrEmpty(detailModel.getEmpName())) {
+				sjErrorMsg.add("Employee Name is required");
+				errField.add(PMTCodeMstListConstants.Employee.code_string_empName);
+				errorCount++;
+			}
+			if (StringUtils.isNullOrEmpty(detailModel.getEmpDateOfBirth())) {
+				sjErrorMsg.add("Date of Birth is required");
+				errField.add(PMTCodeMstListConstants.Employee.code_string_dateOfBirth);
+				errorCount++;
+			}
+		
+			if (errorCount > 0) {
+				detailModel.setErrorMsg(sjErrorMsg.toString());
+				detailModel.setErrorCount(errorCount);
+				detailModel.setErrorFieldGrid(errField.toString());
+				detailModel.setErrorFlag("true");
+				errorFlag = true;
+			} else {
+				detailModel.setErrorFieldGrid("");
+				detailModel.setErrorMsg("");
+				detailModel.setErrorCount(errorCount);
 			}
 		}
 
 		return errorFlag;
 	}
+	
+	// Date Format Change From "DD/MM/YYYY" To "YYYYMMDD ".
+	private String changeDateFormatToBasic(String str) {
+		if (str != null && !str.trim().equals("")) {
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+			LocalDate date = LocalDate.parse(str, formatter);
+			
+			String dateStr = date.toString().substring(8, 10) + "/" + date.toString().substring(5, 7) + "/" + date.toString().substring(0, 4);
+			
+			return LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy")).format(DateTimeFormatter.BASIC_ISO_DATE);
+		}
+		return "";
+	}
+	
 }
